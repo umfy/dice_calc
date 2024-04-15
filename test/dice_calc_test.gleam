@@ -1,41 +1,20 @@
 import gleeunit
 import gleeunit/should
 import gleam/dict
-import loops
+import transform_data
+import format_results
 
 pub fn main() {
   gleeunit.main()
 }
 
-pub fn add_dimension_test() {
-  loops.add_dimension([1, 2, 3, 4], [1, 2, 3, 4])
-  |> should.equal([
-    [1, 1],
-    [1, 2],
-    [1, 3],
-    [1, 4],
-    [2, 1],
-    [2, 2],
-    [2, 3],
-    [2, 4],
-    [3, 1],
-    [3, 2],
-    [3, 3],
-    [3, 4],
-    [4, 1],
-    [4, 2],
-    [4, 3],
-    [4, 4],
-  ])
-}
-
-pub fn expand_dimension_test() {
-  loops.expand_dimension([[1], [2]], [1, 2])
+pub fn expand_outcome_test() {
+  transform_data.expand_outcome([[1], [2]], [1, 2])
   |> should.equal([[1, 1], [1, 2], [2, 1], [2, 2]])
 }
 
 pub fn create_outcome_matrix_test() {
-  loops.create_outcome_matrix([[1, 2, 3], [1, 2], [3]])
+  transform_data.create_outcome_matrix([[1, 2, 3], [1, 2], [3]])
   |> should.equal([
     [1, 1, 3],
     [1, 2, 3],
@@ -47,12 +26,12 @@ pub fn create_outcome_matrix_test() {
 }
 
 pub fn fold_individual_rolls_test() {
-  loops.fold_individual_rolls([[1, 2], [2, 4], [10, 6]])
+  transform_data.fold_individual_rolls([[1, 2], [2, 4], [10, 6]])
   |> should.equal([-1, 0, 3])
 }
 
 pub fn count_occurrences_test() {
-  loops.count_occurrences([
+  transform_data.count_occurrences([
     -2, -1, -1, -1, -1, 0, -1, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0, 1, -1, 0, 0, 0, 0,
     1, -1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 2,
   ])
@@ -62,9 +41,9 @@ pub fn count_occurrences_test() {
 }
 
 pub fn to_fixed_test() {
-  loops.to_fixed(1090)
+  format_results.to_fixed(1090)
   |> should.equal("10.90")
 
-  loops.to_fixed(987)
+  format_results.to_fixed(987)
   |> should.equal("9.87")
 }

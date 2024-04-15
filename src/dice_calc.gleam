@@ -1,5 +1,6 @@
-import loops.{count_results, d}
+import dice.{d}
+import format_results.{display_results}
 
 pub fn main() {
-  count_results([d(8), d(8), d(10)])
+  display_results([d(8), d(10)])
 }
