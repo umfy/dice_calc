@@ -5,6 +5,7 @@ import gleam/io
 import gleam/int
 import gleam/float
 import gleam/string
+import gleam/result
 
 pub fn score(x: Int) -> Int {
   case x {
@@ -72,35 +73,54 @@ pub fn count_occurrences(results: List(Int)) {
   })
 }
 
-/// Rounds a float to 2 decimal places
-fn to_fixed(n: String) {
-  let str_list =
-    n
-    |> string.append("0")
-    |> string.split(".")
+pub fn to_fixed(n: Int) -> String {
+  let integer_part =
+    n / 100
+    |> int.to_string()
 
-  case str_list {
-    [a, b] -> a <> "." <> string.slice(b, 0, 2)
-    [_, ..] -> ""
-    [] -> ""
-  }
+  let decimal_part =
+    n % 100
+    |> int.to_string()
+    |> string.pad_right(2, "0")
+
+  integer_part <> "." <> decimal_part
 }
 
 pub fn format_output(stats: Dict(Int, Int)) {
   let total_count =
     dict.fold(stats, 0, fn(acc, _, occurences) { acc + occurences })
-  dict.map_values(stats, fn(a, b) {
-    let value =
-      b
-      |> int.to_float()
-      |> float.multiply({ 100.0 /. int.to_float(total_count) })
-      |> float.to_string()
-      |> to_fixed()
 
-    case a < 0 {
-      True -> io.println(int.to_string(a) <> "  " <> value)
-      False -> io.println(" " <> int.to_string(a) <> "  " <> value)
-    }
+  let sorted_rows =
+    stats
+    |> dict.to_list()
+    |> list.sort(fn(a, b) { int.compare(b.0, a.0) })
+
+  let output_rows =
+    list.map_fold(sorted_rows, 0, fn(acc, a) {
+      let percentage = a.1 * 10_000 / total_count
+      let acc = acc + percentage
+      #(acc, #(a.0, percentage, acc))
+    })
+
+  io.println("score" <> " | percentage | " <> "total")
+
+  list.each(output_rows.1, fn(row) {
+    let score =
+      row.0
+      |> int.to_string()
+      |> string.pad_left(3, " ")
+
+    let percentage =
+      row.1
+      |> to_fixed
+      |> string.pad_left(12, " ")
+
+    let total =
+      row.2
+      |> to_fixed
+      |> string.pad_left(12, " ")
+
+    io.println(score <> percentage <> total)
   })
 }
 

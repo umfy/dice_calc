@@ -60,3 +60,11 @@ pub fn count_occurrences_test() {
     dict.from_list([#(-2, 1), #(-1, 8), #(0, 18), #(1, 8), #(2, 1)]),
   )
 }
+
+pub fn to_fixed_test() {
+  loops.to_fixed(1090)
+  |> should.equal("10.90")
+
+  loops.to_fixed(987)
+  |> should.equal("9.87")
+}
