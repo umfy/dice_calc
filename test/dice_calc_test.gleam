@@ -47,3 +47,9 @@ pub fn to_fixed_test() {
   format_results.to_fixed(987)
   |> should.equal("9.87")
 }
+
+pub fn count_average_test() {
+  let scores = dict.from_list([#(-1, 1), #(0, 4), #(1, 4), #(2, 3)])
+  transform_data.count_average(scores)
+  |> should.equal("0.75")
+}

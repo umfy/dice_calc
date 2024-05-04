@@ -57,10 +57,18 @@ pub fn format_output(stats: Dict(Int, Int)) {
 pub fn display_results(dice: List(List(Int))) {
   io.println("score" <> " | percentage | " <> "total")
 
-  dice
+  let occurences = dice
   |> transform_data.create_outcome_matrix()
   |> transform_data.fold_individual_rolls()
   |> transform_data.count_occurrences()
+  
+  occurences
   |> format_output()
   |> io.println()
+
+  io.print("average:   ")
+  occurences
+  |> transform_data.count_average()
+  |> io.println()
+
 }
