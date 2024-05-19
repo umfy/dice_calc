@@ -2,6 +2,7 @@ import gleam/list
 import gleam/option.{None, Some}
 import gleam/dict.{type Dict}
 import gleam/int
+import gleam/string
 import gleam/float
 import gleam/result
 import dice.{score}
@@ -47,11 +48,30 @@ pub fn count_average(stats: Dict(Int, Int)) {
     |> dict.to_list()
 
   let sum = list.fold(rows, 0, fn(result, row) { result + row.0 * row.1 })
-  int.to_float(sum) /. int.to_float(total_count)
 
   sum
   |> int.to_float
   |> float.divide(int.to_float(total_count))
   |> result.unwrap(-999.0)
   |> float.to_string
+  |> string.slice(0, 4)
+}
+
+pub fn count_natural_average(stats: Dict(Int, Int)) {
+  let total_count =
+    dict.fold(stats, 0, fn(acc, _, occurences) { acc + occurences })
+
+  let rows =
+    stats
+    |> dict.to_list()
+
+  let sum =
+    list.fold(rows, 0, fn(result, row) { result + int.max(row.0 * row.1, 0) })
+
+  sum
+  |> int.to_float
+  |> float.divide(int.to_float(total_count))
+  |> result.unwrap(-999.0)
+  |> float.to_string
+  |> string.slice(0, 4)
 }

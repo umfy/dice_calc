@@ -53,3 +53,9 @@ pub fn count_average_test() {
   transform_data.count_average(scores)
   |> should.equal("0.75")
 }
+
+pub fn count_natural_average_test() {
+  let scores = dict.from_list([#(-1, 1), #(0, 4), #(1, 4), #(2, 1)])
+  transform_data.count_natural_average(scores)
+  |> should.equal("0.6")
+}

@@ -69,6 +69,6 @@ pub fn display_results(dice: List(List(Int))) {
 
   io.print("average:   ")
   occurences
-  |> transform_data.count_average()
+  |> transform_data.count_natural_average()
   |> io.println()
 }
