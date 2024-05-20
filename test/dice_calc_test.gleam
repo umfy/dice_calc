@@ -27,7 +27,7 @@ pub fn create_outcome_matrix_test() {
 
 pub fn fold_individual_rolls_test() {
   transform_data.fold_individual_rolls([[1, 2], [2, 4], [10, 6]])
-  |> should.equal([-1, 0, 3])
+  |> should.equal([-100, 0, 10])
 }
 
 pub fn count_occurrences_test() {
@@ -58,4 +58,14 @@ pub fn count_natural_average_test() {
   let scores = dict.from_list([#(-1, 1), #(0, 4), #(1, 4), #(2, 1)])
   transform_data.count_natural_average(scores)
   |> should.equal("0.6")
+}
+
+pub fn adv_test() {
+  transform_data.adv(3)
+  |> should.equal([1, 2, 3, 2, 2, 3, 3, 3, 3])
+}
+
+pub fn dis_test() {
+  transform_data.dis(3)
+  |> should.equal([1, 1, 1, 1, 2, 2, 1, 2, 3])
 }
