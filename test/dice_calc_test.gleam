@@ -69,3 +69,8 @@ pub fn dis_test() {
   transform_data.dis(3)
   |> should.equal([1, 1, 1, 1, 2, 2, 1, 2, 3])
 }
+
+pub fn reroll_ones_test() {
+  transform_data.reroll_ones([[1, 1], [1, 2], [2, 1], [2, 2]])
+  |> should.equal([[2,2],[2,2], [1, 1], [1, 2], [2, 1], [2, 2]])
+}

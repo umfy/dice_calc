@@ -8,13 +8,21 @@ import gleam/result
 import dice.{d, score}
 import gleam/set
 
+pub fn reroll_ones(dice: List(List(Int))) {
+  let copy = list.filter(dice, fn(a) { list.all(a, fn(b) { b != 1 }) })
+  list.concat([copy, copy, dice])
+}
+
 pub fn expand_outcome(x: List(List(Int)), y: List(Int)) {
-  list.map(x, fn(a) { list.map(y, fn(b) { list.append(a, [b]) }) })
-  |> list.flatten
+    list.map(x, fn(a) { list.map(y, fn(b) { list.append(a, [b]) }) })
+    |> list.flatten
+
 }
 
 pub fn create_outcome_matrix(dice: List(List(Int))) {
-  create_outcome_matrix_loop(dice, [[]])
+  dice
+  |> create_outcome_matrix_loop([[]])
+  // |> reroll_ones()
 }
 
 fn create_outcome_matrix_loop(dice: List(List(Int)), acc: List(List(Int))) {
