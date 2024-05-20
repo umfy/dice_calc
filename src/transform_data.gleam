@@ -14,9 +14,8 @@ pub fn reroll_ones(dice: List(List(Int))) {
 }
 
 pub fn expand_outcome(x: List(List(Int)), y: List(Int)) {
-    list.map(x, fn(a) { list.map(y, fn(b) { list.append(a, [b]) }) })
-    |> list.flatten
-
+  list.map(x, fn(a) { list.map(y, fn(b) { list.append(a, [b]) }) })
+  |> list.flatten
 }
 
 pub fn create_outcome_matrix(dice: List(List(Int))) {

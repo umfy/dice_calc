@@ -72,5 +72,5 @@ pub fn dis_test() {
 
 pub fn reroll_ones_test() {
   transform_data.reroll_ones([[1, 1], [1, 2], [2, 1], [2, 2]])
-  |> should.equal([[2,2],[2,2], [1, 1], [1, 2], [2, 1], [2, 2]])
+  |> should.equal([[2, 2], [2, 2], [1, 1], [1, 2], [2, 1], [2, 2]])
 }
