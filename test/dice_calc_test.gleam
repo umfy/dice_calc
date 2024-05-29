@@ -27,7 +27,7 @@ pub fn create_outcome_matrix_test() {
 
 pub fn fold_individual_rolls_test() {
   transform_data.fold_individual_rolls([[1, 2], [2, 4], [10, 6]])
-  |> should.equal([-100, 0, 10])
+  |> should.equal([-1, 0, 5])
 }
 
 pub fn count_occurrences_test() {
@@ -71,6 +71,34 @@ pub fn dis_test() {
 }
 
 pub fn reroll_ones_test() {
-  transform_data.reroll_ones([[1, 1], [1, 2], [2, 1], [2, 2]])
-  |> should.equal([[2, 2], [2, 2], [1, 1], [1, 2], [2, 1], [2, 2]])
+  transform_data.reroll_ones([
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [2, 1],
+    [2, 2],
+    [2, 3],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+  ])
+  |> should.equal([
+    [2, 2],
+    [2, 3],
+    [3, 2],
+    [3, 3],
+    [2, 2],
+    [2, 3],
+    [3, 2],
+    [3, 3],
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [2, 1],
+    [2, 2],
+    [2, 3],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+  ])
 }

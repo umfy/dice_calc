@@ -8,6 +8,8 @@ import gleam/result
 import dice.{d, score}
 import gleam/set
 
+const critical_success = 5
+
 pub fn reroll_ones(dice: List(List(Int))) {
   let copy = list.filter(dice, fn(a) { list.all(a, fn(b) { b != 1 }) })
   list.concat([copy, copy, dice])
@@ -32,24 +34,36 @@ fn create_outcome_matrix_loop(dice: List(List(Int)), acc: List(List(Int))) {
   }
 }
 
+fn count_success(rolls) {
+  let length = list.length(rolls)
+
+  let set_length =
+    rolls
+    |> set.from_list()
+    |> set.size()
+
+  let result = list.fold(rolls, 0, fn(acc, b) { acc + score(b) })
+
+  case set_length == 1 && result > 0 || result > length {
+    True -> critical_success
+    _ -> result
+  }
+}
+
 pub fn fold_individual_rolls(matrix: List(List(Int))) {
   list.map(matrix, fn(a) {
-    let set_length =
-      a
-      |> set.from_list()
-      |> set.size()
-
-    let length = list.length(a)
-
-    let result = list.fold(a, 0, fn(acc, b) { acc + score(b) })
-
-    case set_length == 1 && result > 0 {
-      True -> 10
-      False ->
-        case result > length {
-          True -> 10
-          _ -> result
+    let count_failures =
+      list.fold(a, 0, fn(acc, b) {
+        case b {
+          1 -> acc + 1
+          _ -> acc
         }
+      })
+
+    case count_failures {
+      0 -> count_success(a)
+      1 -> -1
+      _ -> -2
     }
   })
 }
