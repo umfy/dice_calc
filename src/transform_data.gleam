@@ -6,7 +6,6 @@ import gleam/string
 import gleam/float
 import gleam/result
 import dice.{d, score}
-import gleam/set
 
 const critical_success = 5
 
@@ -43,7 +42,7 @@ pub fn create_outcome_matrix(dice: List(List(Int))) {
   dice
   |> create_outcome_matrix_loop([[]])
   // |> reroll_ones()
-  // |> keep_extreme_of_first_x(2, int.max)
+  // |> keep_extreme_of_first_x(2, int.min)
 }
 
 fn create_outcome_matrix_loop(dice: List(List(Int)), acc: List(List(Int))) {
@@ -57,33 +56,34 @@ fn create_outcome_matrix_loop(dice: List(List(Int)), acc: List(List(Int))) {
 fn count_success(rolls) {
   let length = list.length(rolls)
 
-  let set_length =
-    rolls
-    |> set.from_list()
-    |> set.size()
-
   let result = list.fold(rolls, 0, fn(acc, b) { acc + score(b) })
 
-  case set_length == 1 && result > 0 || result > length {
+  case result > length {
     True -> critical_success
     _ -> result
   }
 }
 
+pub fn is_critical_failure(a: List(Int)) {
+  // all the same value 11, 22 / 111, 222, 333
+  // let length = list.length(a)
+  let first = list.first(a)
+  case first {
+    Ok(head) -> head <= 3 && list.all(a, fn(b) { b == head })
+    Error(Nil) -> False
+  }
+}
+
+// pub fn is_critical_failure(a: List(Int)) {
+//   let length = list.length(a)
+//   list.all(a, fn(b) { b <= length })
+// }
+
 pub fn fold_individual_rolls(matrix: List(List(Int))) {
   list.map(matrix, fn(a) {
-    let count_failures =
-      list.fold(a, 0, fn(acc, b) {
-        case b {
-          1 -> acc + 1
-          _ -> acc
-        }
-      })
-
-    case count_failures {
-      0 -> count_success(a)
-      1 -> -1
-      _ -> -2
+    case is_critical_failure(a) {
+      False -> count_success(a)
+      True -> -1
     }
   })
 }
