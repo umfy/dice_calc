@@ -1,6 +1,6 @@
 pub fn score(x: Int) -> Int {
   case x {
-    1 -> -1
+    1 -> 0
     2 -> 0
     3 -> 0
     4 -> 0

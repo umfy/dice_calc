@@ -102,3 +102,26 @@ pub fn reroll_ones_test() {
     [3, 3],
   ])
 }
+
+pub fn discard_lower_of_first_x_test() {
+  transform_data.discard_lower_of_first_x([
+    [1, 1, 1],
+    [1, 1, 2],
+    [1, 2, 1],
+    [1, 2, 2],
+    [2, 1, 1],
+    [2, 1, 2],
+    [2, 2, 1],
+    [2, 2, 2],
+  ], 2)
+  |> should.equal([
+    [1, 1],
+    [1, 2],
+    [2, 1],
+    [2, 2],
+    [2, 1],
+    [2, 2],
+    [2, 1],
+    [2, 2],
+  ])
+}

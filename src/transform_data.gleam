@@ -7,12 +7,22 @@ import gleam/float
 import gleam/result
 import dice.{d, score}
 import gleam/set
+import gleam/io
 
 const critical_success = 5
 
 pub fn reroll_ones(dice: List(List(Int))) {
   let copy = list.filter(dice, fn(a) { list.all(a, fn(b) { b != 1 }) })
   list.concat([copy, copy, dice])
+}
+
+pub fn discard_lower_of_first_x(dice: List(List(Int)), index: Int) {
+  list.map(dice, fn(a) {
+    let tup = list.split(a, index)
+
+    let highest = list.fold(tup.0, 0, fn(acc, b) { int.max(acc, b) })
+    list.concat([[highest], tup.1])
+  })
 }
 
 pub fn expand_outcome(x: List(List(Int)), y: List(Int)) {
@@ -24,6 +34,7 @@ pub fn create_outcome_matrix(dice: List(List(Int))) {
   dice
   |> create_outcome_matrix_loop([[]])
   // |> reroll_ones()
+  // |> discard_lower_of_first_x(2)
 }
 
 fn create_outcome_matrix_loop(dice: List(List(Int)), acc: List(List(Int))) {
