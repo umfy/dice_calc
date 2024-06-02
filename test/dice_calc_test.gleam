@@ -3,6 +3,7 @@ import gleeunit/should
 import gleam/dict
 import transform_data
 import format_results
+import gleam/int
 
 pub fn main() {
   gleeunit.main()
@@ -103,17 +104,21 @@ pub fn reroll_ones_test() {
   ])
 }
 
-pub fn discard_lower_of_first_x_test() {
-  transform_data.discard_lower_of_first_x([
-    [1, 1, 1],
-    [1, 1, 2],
-    [1, 2, 1],
-    [1, 2, 2],
-    [2, 1, 1],
-    [2, 1, 2],
-    [2, 2, 1],
-    [2, 2, 2],
-  ], 2)
+pub fn keep_extreme_of_first_x_test() {
+  transform_data.keep_extreme_of_first_x(
+    [
+      [1, 1, 1],
+      [1, 1, 2],
+      [1, 2, 1],
+      [1, 2, 2],
+      [2, 1, 1],
+      [2, 1, 2],
+      [2, 2, 1],
+      [2, 2, 2],
+    ],
+    2,
+    int.max,
+  )
   |> should.equal([
     [1, 1],
     [1, 2],
